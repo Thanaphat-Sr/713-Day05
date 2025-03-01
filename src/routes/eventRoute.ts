@@ -26,6 +26,8 @@ router.get("/", async (req, res) => {
       res.status(500).send("Internal Server Error");
     }
     return;
+  } finally {
+    console.log(`Request is completed. with pageNo=${pageNo} and pageSize=${pageSize}`);
   }
 });
 
