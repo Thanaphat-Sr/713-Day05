@@ -1,18 +1,25 @@
 // filepath: /C:/Users/ASUS/713-Day05/src/repository/eventRepositoryPrisma.ts
 import { PrismaClient, Prisma } from '@prisma/client';
-import type { Event } from '../models/event';
+import { Event, PageEvent } from '../models/event';
 
 const prisma = new PrismaClient();
 
-export function getAllEventsWithOrganizerPagination(
+export async function getAllEventsWithOrganizerPagination(
+  keyword: string,
   pageSize: number,
   pageNo: number
-) {
-  return prisma.event.findMany({
+): Promise<PageEvent> {
+  const where = {
+    title: { contains: keyword }
+  };
+
+  const events = await prisma.event.findMany({
+    where,
     skip: pageSize * (pageNo - 1),
     take: pageSize,
     select: {
       id: true,
+      title: true,
       category: true,
       organizerId: false,
       organizer: {
@@ -22,6 +29,9 @@ export function getAllEventsWithOrganizerPagination(
       }
     }
   });
+
+  const count = await prisma.event.count({ where });
+  return { count, events } as PageEvent;  
 }
 
 export function getEventByCategory(category: string) {

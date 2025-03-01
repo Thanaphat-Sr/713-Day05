@@ -1,6 +1,6 @@
 // filepath: /C:/Users/ASUS/713-Day05/src/services/eventService.ts
 import { Prisma } from "@prisma/client";
-import type { Event } from "../models/event";
+import type { Event, PageEvent } from "../models/event";
 import * as repo from "../repository/eventRepositoryPrisma";
 
 export function getEventByCategory(category: string) {
@@ -24,8 +24,9 @@ export function addEvent(newEvent: Event) {
   return repo.addEvent(eventCreateInput);
 }
 
-export function getAllEventsWithPagination(pageSize: number, pageNo: number) {
-  return repo.getAllEventsWithOrganizerPagination(pageSize, pageNo);
+export async function getAllEventsWithPagination(keyword: string, pageSize: number, pageNo: number): Promise<PageEvent> {
+  const pageEvents = await repo.getAllEventsWithOrganizerPagination(keyword, pageSize, pageNo);
+  return pageEvents;
 }
 
 export function count() {

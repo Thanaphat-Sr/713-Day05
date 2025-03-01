@@ -21,3 +21,7 @@ export interface Event {
     email: string;
   }[];
 }
+export interface PageEvent {
+  count: number;
+  events: Event[];
+}
