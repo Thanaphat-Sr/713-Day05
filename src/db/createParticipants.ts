@@ -27,14 +27,22 @@ export async function createParticipants() {
     },
   ];
 
+  const responseEvents = await prisma.event.findMany();
+
   for (const participant of participants) {
     await prisma.participant.create({
-      data: participant,
+      data: {
+        ...participant,
+        event: {
+          connect: {
+            id: responseEvents[0].id, // Assuming you want to connect to the first event
+          },
+        },
+      },
     });
   }
 
     const resposneParticipants = await prisma.participant.findMany();
-    const responseEvents = await prisma.event.findMany();
     
  
     addEvent(resposneParticipants[0].id, responseEvents[0].id)
@@ -58,7 +66,7 @@ async function addEvent(participantId: number, eventId: number) {
   await prisma.participant.update({
     where: { id: participantId },
     data: {
-      events: {
+      event: {
         connect: {
           id: eventId,
         },

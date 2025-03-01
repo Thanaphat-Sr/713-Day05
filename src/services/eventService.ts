@@ -16,7 +16,7 @@ export function getEventById(id: number): Promise<Event | null> {
 }
 
 export function addEvent(newEvent: Event) {
-  const eventCreateInput: Prisma.eventCreateInput = {
+  const eventCreateInput: Prisma.EventCreateInput = {
     ...newEvent,
     organizer: newEvent.organizer ? { connect: { id: newEvent.organizer.id } } : undefined,
     participants: newEvent.participants ? { create: newEvent.participants.map(participant => ({ id: participant.id, name: participant.name, email: participant.email })) } : undefined
