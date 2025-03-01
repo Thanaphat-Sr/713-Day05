@@ -10,7 +10,13 @@ export async function getAllEventsWithOrganizerPagination(
   pageNo: number
 ): Promise<PageEvent> {
   const where = {
-    title: { contains: keyword }
+    OR: [
+      { title: { contains: keyword } },
+      { description: { contains: keyword } },
+      { category: { contains: keyword } },
+      { organizer: { name: { contains: keyword } } }
+    ]
+
   };
 
   const events = await prisma.event.findMany({
