@@ -58,3 +58,7 @@ export function addEvent(eventCreateInput: Prisma.eventCreateInput) {
     data: eventCreateInput,
   });
 }
+
+export function countEvent() {
+  return prisma.event.count();
+}
