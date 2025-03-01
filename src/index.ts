@@ -8,11 +8,8 @@ dotenv.config();
 import { uploadFile } from './services/uploadFileService';
 const app = express();
 app.use(express.json());
-app.use('/events',eventRoute);
+app.use('/events', eventRoute);
 const port = 3000;
-
-
-
 
 const upload = multer({ storage: multer.memoryStorage() });
 
@@ -36,6 +33,7 @@ app.post('/upload', upload.single('file'), async (req: any, res: any) => {
     res.status(500).send('Error uploading file.');
   }
 });
+
 app.listen(port, () => {
   console.log(`App listening at http://localhost:${port}`);
 });

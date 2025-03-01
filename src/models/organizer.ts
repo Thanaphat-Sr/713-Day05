@@ -4,3 +4,4 @@ export type Organizer = {
   name: string;
   events: Event[];
 };
+
