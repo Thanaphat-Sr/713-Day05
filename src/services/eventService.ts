@@ -1,7 +1,8 @@
-// filepath: /C:/Users/ASUS/713-Day05/src/services/eventService.ts
-import { Prisma } from "@prisma/client";
-import type { Event, PageEvent } from "../models/event";
-import * as repo from "../repository/eventRepositoryPrisma";
+import { PrismaClient, Prisma } from '@prisma/client';
+import { Event, PageEvent } from '../models/event';
+import * as repo from '../repository/eventRepositoryPrisma';
+
+const prisma = new PrismaClient();
 
 export function getEventByCategory(category: string) {
   return repo.getEventByCategory(category);
@@ -17,9 +18,15 @@ export function getEventById(id: number): Promise<Event | null> {
 
 export function addEvent(newEvent: Event) {
   const eventCreateInput: Prisma.EventCreateInput = {
-    ...newEvent,
+    title: newEvent.title,
+    description: newEvent.description,
+    category: newEvent.category,
+    location: newEvent.location,
+    date: new Date(newEvent.date),
+    time: newEvent.time,
+    petsAllowed: newEvent.petsAllowed,
     organizer: newEvent.organizer ? { connect: { id: newEvent.organizer.id } } : undefined,
-    participants: newEvent.participants ? { create: newEvent.participants.map(participant => ({ id: participant.id, name: participant.name, email: participant.email })) } : undefined
+    participants: newEvent.participants ? { create: newEvent.participants.map(participant => ({ name: participant.name, email: participant.email })) } : undefined
   };
   return repo.addEvent(eventCreateInput);
 }
@@ -32,3 +39,4 @@ export async function getAllEventsWithPagination(keyword: string, pageSize: numb
 export function count() {
   return repo.countEvent();
 }
+

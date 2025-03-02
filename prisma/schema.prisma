@@ -23,31 +23,31 @@ datasource db {
   directUrl = env("DIRECT_URL")
 }
 
-model event {
-  id           Int           @id @default(autoincrement())
-  category     String
-  title        String
-  description  String
-  location     String
-  date         String
-  time         String
-  petsAllowed  Boolean
-  organizerId  Int?
-  organizer    organizer?    @relation(fields: [organizerId], references: [id])
-  participants participant[]
+model Event {
+  id          Int      @id @default(autoincrement())
+  title       String
+  description String
+  category    String
+  location    String
+  date        DateTime
+  time        String
+  petsAllowed Boolean
+  organizerId Int?
+  organizer   Organizer? @relation(fields: [organizerId], references: [id])
+  participants Participant[]
 }
 
-model organizer {
-  id     Int     @id @default(autoincrement())
-  name   String
-  events event[]
+model Organizer {
+  id    Int     @id @default(autoincrement())
+  name  String
+  events Event[]
 }
 
-model participant {
-  id     Int     @id @default(autoincrement())
-  name   String
-  email  String
-  events event[] 
+model Participant {
+  id      Int    @id @default(autoincrement())
+  name    String
+  email   String
+  eventId Int
+  event   Event  @relation(fields: [eventId], references: [id])
 }
-
 

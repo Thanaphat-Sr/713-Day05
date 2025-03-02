@@ -15,12 +15,28 @@ datasource db {
 
 model Event {
   id          Int      @id @default(autoincrement())
-  category    String
   title       String
   description String
+  category    String
   location    String
-  date        String
+  date        DateTime
   time        String
   petsAllowed Boolean
-  organizer   String
+  organizerId Int?
+  organizer   Organizer? @relation(fields: [organizerId], references: [id])
+  participants Participant[]
+}
+
+model Organizer {
+  id    Int     @id @default(autoincrement())
+  name  String
+  events Event[]
+}
+
+model Participant {
+  id      Int    @id @default(autoincrement())
+  name    String
+  email   String
+  eventId Int
+  event   Event  @relation(fields: [eventId], references: [id])
 }
