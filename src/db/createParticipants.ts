@@ -33,7 +33,7 @@ export async function createParticipants() {
     await prisma.participant.create({
       data: {
         ...participant,
-        events: {
+        event: {
           connect: {
             id: responseEvents[0].id, // Assuming you want to connect to the first event
           },
@@ -66,7 +66,7 @@ async function addEvent(participantId: number, eventId: number) {
   await prisma.participant.update({
     where: { id: participantId },
     data: {
-      events: {
+      event: {
         connect: {
           id: eventId,
         },
